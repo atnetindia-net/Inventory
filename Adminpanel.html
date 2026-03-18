@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="A&T logo.png">
+<title>Admin Panel</title>
+
+<link rel="stylesheet" href="Ad Style.css">
+
+<!-- Google Icons -->
+<link rel="stylesheet"
+href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0">
+
+</head>
+
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="site-nav">
+
+<button class="sidebar-toggle">
+<span class="material-symbols-rounded">menu</span>
+</button>
+
+</nav>
+
+
+<div class="container">
+
+<!-- SIDEBAR -->
+<aside class="sidebar collapsed">
+
+<!-- SIDEBAR HEADER -->
+<div class="sidebar-header">
+
+<img src="black.png" class="header-logo">
+
+<button class="sidebar-toggle">
+<span class="material-symbols-rounded">chevron_left</span>
+</button>
+
+</div>
+
+
+<div class="sidebar-content">
+
+<!-- SEARCH -->
+<form class="search-form">
+
+<span class="material-symbols-rounded">search</span>
+
+<input type="search" placeholder="Search..." required>
+
+</form>
+
+
+<!-- MENU -->
+<ul class="menu-list">
+
+
+<li class="menu-item">
+
+<a href="#" class="menu-link active">
+
+<span class="material-symbols-rounded">dashboard</span>
+<span class="menu-label">A&T Products</span>
+
+</a>
+
+</li>
+
+
+<li class="menu-item">
+
+<a href="#" class="menu-link">
+
+<span class="material-symbols-rounded">insert_chart</span>
+<span class="menu-label">Aver Products</span>
+
+</a>
+
+</li>
+
+
+<li class="menu-item">
+  <a href="#" class="menu-link demo-toggle">
+    <span class="material-symbols-rounded">storefront</span>
+    <span class="menu-label">Demo Products</span>
+    <span class="material-symbols-rounded">expand_more</span>
+  </a>
+
+  <ul class="submenu">
+    <li class="menu-item">
+      <a href="#" class="menu-link">
+        <span class="menu-label">Aver - Demo Stocks</span>
+      </a>
+    </li>
+    <li class="menu-item">
+      <a href="#" class="menu-link">
+        <span class="menu-label">A&T - Demo Stocks</span>
+      </a>
+    </li>
+  </ul>
+</li>
+
+
+</ul>
+
+</div>
+
+
+<!-- SIDEBAR FOOTER -->
+<div class="sidebar-footer">
+
+<button class="theme-toggle">
+
+<span class="theme-icon material-symbols-rounded">dark_mode</span>
+<span class="theme-text">Dark Mode</span>
+
+</button>
+
+</div>
+
+</aside>
+
+
+
+<!-- MAIN CONTENT -->
+
+<div class="main-content">
+
+<h1 class="page-title">Dashboard Overview</h1>
+
+<button class="logout-btn" onclick="openLogoutPopup()">Logout</button>
+
+<div class="card">
+
+
+
+</div>
+
+</div>
+
+</div>
+
+<!-- SCRIPT -->
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="Ad Script.js"></script>
+
+<div id="logoutPopup" class="logout-popup">
+
+<div class="popup-box">
+
+<h3>Confirm Logout</h3>
+<p>Are you sure you want to logout?</p>
+
+<div class="popup-buttons">
+<button class="cancel-btn" onclick="closeLogoutPopup()">Cancel</button>
+<button class="confirm-btn" onclick="confirmLogout()">Logout</button>
+</div>
+
+</div>
+</div>
+
+<script>
+
+/* ============================= */
+/* ADMIN SECURITY CHECK */
+/* ============================= */
+
+// Allow refresh, only block if NOT logged in
+if (sessionStorage.getItem("isAdmin") !== "true") {
+  window.location.href = "Form.html";
+}
+
+/* ============================= */
+/* LOGOUT POPUP */
+/* ============================= */
+
+function openLogoutPopup(){
+  document.getElementById("logoutPopup").style.display = "flex";
+}
+
+function closeLogoutPopup(){
+  document.getElementById("logoutPopup").style.display = "none";
+}
+
+/* ============================= */
+/* LOGOUT FUNCTION */
+/* ============================= */
+
+function confirmLogout(){
+
+  // Clear session
+  sessionStorage.removeItem("isAdmin");
+
+  // Redirect
+  window.location.href = "Form.html";
+}
+
+/* ============================= */
+/* CLOSE POPUP ON OUTSIDE CLICK */
+/* ============================= */
+
+window.addEventListener("click", function(e){
+  const popup = document.getElementById("logoutPopup");
+  if(e.target === popup){
+    closeLogoutPopup();
+  }
+});
+
+</script>
+
+</body>
+
+</html>

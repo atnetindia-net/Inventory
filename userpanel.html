@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="A&T logo.png">
+<title>User Panel</title>
+
+<link rel="stylesheet" href="User.css">
+
+<!-- Google Icons -->
+<link rel="stylesheet"
+href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0">
+
+</head>
+
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="site-nav">
+
+<button class="sidebar-toggle">
+<span class="material-symbols-rounded">menu</span>
+</button>
+
+</nav>
+
+
+<div class="container">
+
+<!-- SIDEBAR -->
+<aside class="sidebar collapsed">
+
+<!-- SIDEBAR HEADER -->
+<div class="sidebar-header">
+
+<img src="black.png" class="header-logo">
+
+<button class="sidebar-toggle">
+<span class="material-symbols-rounded">chevron_left</span>
+</button>
+
+</div>
+
+
+<div class="sidebar-content">
+
+<!-- SEARCH -->
+<form class="search-form">
+
+<span class="material-symbols-rounded">search</span>
+
+<input type="search" placeholder="Search..." required>
+
+</form>
+
+
+<!-- MENU -->
+<ul class="menu-list">
+
+<li class="menu-item">
+
+<a href="#" class="menu-link active">
+
+<span class="material-symbols-rounded">dashboard</span>
+<span class="menu-label">A&T Stocks</span>
+
+</a>
+
+</li>
+
+<li class="menu-item">
+
+<a href="#" class="menu-link">
+
+<span class="material-symbols-rounded">insert_chart</span>
+<span class="menu-label">Aver Stocks</span>
+
+</a>
+
+</li>
+
+</ul>
+
+</li>
+
+</ul>
+
+</div>
+
+<!-- SIDEBAR FOOTER -->
+<div class="sidebar-footer">
+
+<button class="theme-toggle">
+
+<span class="theme-icon material-symbols-rounded">dark_mode</span>
+<span class="theme-text">Dark Mode</span>
+
+</button>
+
+</div>
+
+</aside>
+
+
+
+<!-- MAIN CONTENT -->
+
+<div class="main-content">
+
+<h1 class="page-title">Dashboard Overview</h1>
+
+<button class="logout-btn" onclick="openLogoutPopup()">Logout</button>
+
+<div class="card">
+
+Welcome to your dashboard!  
+Use the menu to navigate, toggle the sidebar, or switch between light and dark themes to personalize your experience.
+
+
+
+</div>
+
+</div>
+
+
+</div>
+
+
+<!-- SCRIPT -->
+ <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="user.js"></script>
+
+<div id="logoutPopup" class="logout-popup">
+
+<div class="popup-box">
+
+<h3>Confirm Logout</h3>
+<p>Are you sure you want to logout?</p>
+
+<div class="popup-buttons">
+<button class="cancel-btn" onclick="closeLogoutPopup()">Cancel</button>
+<button class="confirm-btn" onclick="confirmLogout()">Logout</button>
+</div>
+
+</div>
+</div>
+
+<script>
+
+function openLogoutPopup(){
+document.getElementById("logoutPopup").style.display="flex";
+}
+
+function closeLogoutPopup(){
+document.getElementById("logoutPopup").style.display="none";
+}
+
+function confirmLogout(){
+
+/* Redirect to login page */
+window.location.href = "Form.html";
+
+}
+
+</script>
+
+</body>
+
+</html>
