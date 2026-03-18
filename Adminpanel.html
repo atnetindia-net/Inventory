@@ -169,6 +169,12 @@ href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wgh
 
 <script>
 
+  // BLOCK DIRECT ACCESS
+if (sessionStorage.getItem("isAdmin") !== "true") {
+  window.location.replace("Form.html");
+}
+
+  
 /* ============================= */
 /* ADMIN SECURITY CHECK */
 /* ============================= */
@@ -194,12 +200,8 @@ function closeLogoutPopup(){
 /* LOGOUT FUNCTION */
 /* ============================= */
 
-function confirmLogout(){
-
-  // Clear session
+  function confirmLogout(){
   sessionStorage.removeItem("isAdmin");
-
-  // Redirect
   window.location.href = "Form.html";
 }
 
