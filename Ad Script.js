@@ -315,7 +315,10 @@ let productTotals = {};
 data.forEach(d => {
 
 const salable = Number(d["Salable Stock"]) || 0;
-const reserved = Number(d["Reserved Stock"]) || 0;
+const reservedRaw = d["Reserved Stock"] || "";
+
+// Extract first number from text (like "2 - Sigma")
+const reserved = parseInt(reservedRaw.toString().match(/\d+/)) || 0;
 
 totalSalable += salable;
 totalReserved += reserved;
