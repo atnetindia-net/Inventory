@@ -311,13 +311,14 @@ let totalReserved = 0;
 
 let categoryTotals = {};
 let productTotals = {};
+let categoryMap = {}; // ✅ for popup flow
 
 data.forEach(d => {
 
 const salable = Number(d["Salable Stock"]) || 0;
-const reservedRaw = d["Reserved Stock"] || "";
 
-// Extract first number from text (like "2 - Sigma")
+// ✅ RESERVED FIX
+const reservedRaw = d["Reserved Stock"] || "";
 const reserved = parseInt(reservedRaw.toString().match(/\d+/)) || 0;
 
 totalSalable += salable;
@@ -326,10 +327,21 @@ totalReserved += reserved;
 const cat = d["Category"];
 const prod = d["Product Model"];
 
+/* CATEGORY TOTAL */
 categoryTotals[cat] = (categoryTotals[cat] || 0) + salable;
+
+/* PRODUCT TOTAL */
 productTotals[prod] = (productTotals[prod] || 0) + salable;
 
+/* ✅ CATEGORY → PRODUCTS MAP */
+if(!categoryMap[cat]) categoryMap[cat] = [];
+categoryMap[cat].push(d);
+
 });
+
+/* ============================= */
+/* SUMMARY CARDS */
+/* ============================= */
 
 const cards = createSummaryCards([
 {title:"Categories",value:Object.keys(categoryTotals).length},
@@ -340,9 +352,33 @@ const cards = createSummaryCards([
 
 mainContent.appendChild(cards);
 
+/* ============================= */
+/* ✅ MAKE ONLY 2 CARDS CLICKABLE */
+/* ============================= */
+
+const cardElements = cards.querySelectorAll(".summary-card");
+
+/* CATEGORY CARD CLICK */
+cardElements[0].style.cursor = "pointer";
+cardElements[0].addEventListener("click", () => {
+openCategoryPopup(categoryMap);
+});
+
+/* PRODUCT CARD CLICK */
+cardElements[1].style.cursor = "pointer";
+cardElements[1].addEventListener("click", () => {
+openAllProductsPopup(data);
+});
+
+/* ============================= */
+/* CHART */
+/* ============================= */
+
 createCharts(categoryTotals, productTotals);
 
+/* ============================= */
 /* TABLE */
+/* ============================= */
 
 const table = createTable(
 ["Category","Product Model","Salable Stock","Reserved Stock"],
@@ -356,7 +392,9 @@ d["Reserved Stock"]
 
 mainContent.appendChild(table);
 
-/* POPUP */
+/* ============================= */
+/* TABLE POPUP (UNCHANGED) */
+/* ============================= */
 
 const rows = table.querySelectorAll("tbody tr");
 
@@ -388,6 +426,160 @@ d,
 });
 
 });
+
+}
+
+/* ===================================================== */
+/* 🔥 CATEGORY POPUP */
+/* ===================================================== */
+
+function openCategoryPopup(categoryMap){
+
+const overlay = document.createElement("div");
+overlay.className = "inventory-popup";
+
+const box = document.createElement("div");
+box.className = "inventory-popup-box";
+
+box.innerHTML = `<h3>Select Category</h3>`;
+
+Object.keys(categoryMap).forEach(cat => {
+
+const card = document.createElement("div");
+card.className = "popup-card";
+card.textContent = cat;
+
+card.onclick = () => {
+overlay.remove();
+openProductPopup(cat, categoryMap[cat]);
+};
+
+box.appendChild(card);
+
+});
+
+const close = document.createElement("button");
+close.textContent = "Close";
+close.className = "popup-close";
+close.onclick = () => overlay.remove();
+
+box.appendChild(close);
+overlay.appendChild(box);
+document.body.appendChild(overlay);
+
+}
+
+/* ===================================================== */
+/* 🔥 PRODUCT POPUP (FROM CATEGORY) */
+/* ===================================================== */
+
+function openProductPopup(category, products){
+
+const overlay = document.createElement("div");
+overlay.className = "inventory-popup";
+
+const box = document.createElement("div");
+box.className = "inventory-popup-box";
+
+box.innerHTML = `<h3>${category}</h3>`;
+
+products.forEach(d => {
+
+const card = document.createElement("div");
+card.className = "popup-card";
+card.textContent = d["Product Model"];
+
+card.onclick = () => {
+overlay.remove();
+
+showProductPopup(
+d["Category"],
+d["Product Model"],
+d,
+[
+"Salable Stock",
+"Reserved Stock",
+"OEM Support Stock / FOC DP",
+"Saleable Stock given for Demo",
+"Demo",
+"Standby",
+"RMA",
+"Material Intransit",
+"Remarks"
+]
+);
+
+};
+
+box.appendChild(card);
+
+});
+
+const close = document.createElement("button");
+close.textContent = "Close";
+close.className = "popup-close";
+close.onclick = () => overlay.remove();
+
+box.appendChild(close);
+overlay.appendChild(box);
+document.body.appendChild(overlay);
+
+}
+
+/* ===================================================== */
+/* 🔥 ALL PRODUCTS POPUP */
+/* ===================================================== */
+
+function openAllProductsPopup(data){
+
+const overlay = document.createElement("div");
+overlay.className = "inventory-popup";
+
+const box = document.createElement("div");
+box.className = "inventory-popup-box";
+
+box.innerHTML = `<h3>All Products</h3>`;
+
+data.forEach(d => {
+
+const card = document.createElement("div");
+card.className = "popup-card";
+card.textContent = d["Product Model"];
+
+card.onclick = () => {
+overlay.remove();
+
+showProductPopup(
+d["Category"],
+d["Product Model"],
+d,
+[
+"Salable Stock",
+"Reserved Stock",
+"OEM Support Stock / FOC DP",
+"Saleable Stock given for Demo",
+"Demo",
+"Standby",
+"RMA",
+"Material Intransit",
+"Remarks"
+]
+);
+
+};
+
+box.appendChild(card);
+
+});
+
+const close = document.createElement("button");
+close.textContent = "Close";
+close.className = "popup-close";
+close.onclick = () => overlay.remove();
+
+box.appendChild(close);
+overlay.appendChild(box);
+document.body.appendChild(overlay);
 
 }
 
@@ -427,6 +619,10 @@ productTotals[prod] = (productTotals[prod] || 0) + salable;
 
 });
 
+/* ============================= */
+/* SUMMARY CARDS */
+/* ============================= */
+
 const cards = createSummaryCards([
 {title:"Products",value:data.length},
 {title:"Stock at HO",value:totalHO},
@@ -436,9 +632,28 @@ const cards = createSummaryCards([
 
 mainContent.appendChild(cards);
 
+/* ============================= */
+/* ✅ MAKE ONLY PRODUCT CARD CLICKABLE */
+/* ============================= */
+
+const cardElements = cards.querySelectorAll(".summary-card");
+
+/* ONLY FIRST CARD CLICKABLE */
+cardElements[0].style.cursor = "pointer";
+
+cardElements[0].addEventListener("click", () => {
+openATProductPopup(data);
+});
+
+/* ============================= */
+/* CHART */
+/* ============================= */
+
 createCharts(categoryTotals, productTotals);
 
+/* ============================= */
 /* TABLE */
+/* ============================= */
 
 const table = createTable(
 ["Category","Product Model","Stock at HO","Stock at MFG","Salable Stock"],
@@ -453,7 +668,9 @@ d["Salable Stock"]
 
 mainContent.appendChild(table);
 
-/* POPUP */
+/* ============================= */
+/* TABLE POPUP (UNCHANGED) */
+/* ============================= */
 
 const rows = table.querySelectorAll("tbody tr");
 
@@ -481,6 +698,68 @@ d,
 });
 
 });
+
+}
+
+/* ===================================================== */
+/* 🔥 PRODUCT POPUP (2 PER ROW GRID) */
+/* ===================================================== */
+
+function openATProductPopup(data){
+
+const overlay = document.createElement("div");
+overlay.className = "inventory-popup";
+
+const box = document.createElement("div");
+box.className = "inventory-popup-box";
+
+box.innerHTML = `<h3>All Products</h3>`;
+
+/* ✅ GRID CONTAINER */
+const grid = document.createElement("div");
+grid.className = "popup-grid";
+
+data.forEach(d => {
+
+const card = document.createElement("div");
+card.className = "popup-card";
+card.textContent = d["Product Model"];
+
+card.onclick = () => {
+
+overlay.remove();
+
+showProductPopup(
+d["Category"],
+d["Product Model"],
+d,
+[
+"Stock at HO",
+"Stock at MFG",
+"Salable Stock",
+"Reserved",
+"Remarks"
+]
+);
+
+};
+
+grid.appendChild(card);
+
+});
+
+/* ADD GRID */
+box.appendChild(grid);
+
+/* CLOSE BUTTON */
+const close = document.createElement("button");
+close.textContent = "Close";
+close.className = "popup-close";
+close.onclick = () => overlay.remove();
+
+box.appendChild(close);
+overlay.appendChild(box);
+document.body.appendChild(overlay);
 
 }
 
