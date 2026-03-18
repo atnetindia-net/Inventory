@@ -294,14 +294,24 @@ function setAdminMode() {
 /* BUTTON EVENTS */
 /* ============================= */
 
-userBtn.addEventListener("click", function(e){
+userBtn.addEventListener("click", (e)=>{
   e.preventDefault();
   setUserMode();
 });
 
-adminBtn.addEventListener("click", function(e){
+adminBtn.addEventListener("click", (e)=>{
   e.preventDefault();
   setAdminMode();
+});
+
+/* ============================= */
+/* ENTER KEY SUPPORT */
+/* ============================= */
+
+document.addEventListener("keydown", function(e){
+  if(e.key === "Enter"){
+    submitBtn.click();
+  }
 });
 
 /* ============================= */
@@ -309,21 +319,19 @@ adminBtn.addEventListener("click", function(e){
 /* ============================= */
 
 function encode(str){
-  return btoa(str); // base64 encode
+  return btoa(str);
 }
 
 /* ============================= */
 /* HIDDEN CREDENTIALS */
 /* ============================= */
 
-// ""
-const USER_ENCODED = "QWRtaW4=";
-
-// ""
-const PASS_ENCODED = "QWRtaW5AMTIz";
+// Admin (Base64 encoded)
+const USER_ENCODED = "QWRtaW4=";       // Admin
+const PASS_ENCODED = "QWRtaW5AMTIz";   // Admin@123
 
 /* ============================= */
-/* LOGIN BUTTON */
+/* LOGIN FUNCTION */
 /* ============================= */
 
 submitBtn.addEventListener("click", function(e){
@@ -341,20 +349,33 @@ submitBtn.addEventListener("click", function(e){
       return;
     }
 
+    // Clear any admin session
+    sessionStorage.removeItem("isAdmin");
+
     window.location.href = "userpanel.html";
   }
 
   /* ADMIN LOGIN */
-  if(mode === "admin"){
+  else if(mode === "admin"){
+
+    if(username === "" || password === ""){
+      alert("Enter Admin credentials");
+      return;
+    }
+
+    // Encode input
+    const userEncodedInput = encode(username);
+    const passEncodedInput = encode(password);
 
     if(
-      encode(username) === USER_ENCODED &&
-      encode(password) === PASS_ENCODED
+      userEncodedInput === USER_ENCODED &&
+      passEncodedInput === PASS_ENCODED
     ){
 
-      // Store session
+      // ✅ SET SESSION
       sessionStorage.setItem("isAdmin","true");
 
+      // Redirect to Admin Panel
       window.location.href = "Adminpanel.html";
 
     }else{
