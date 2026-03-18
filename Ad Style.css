@@ -1115,3 +1115,47 @@ background:#f2f2f2;
   background-color: #f4f6fb;
   font-weight: 600;
 }
+
+.popup-card{
+  padding:10px;
+  margin:8px 0;
+  background:#f4f6fb;
+  border-radius:6px;
+  cursor:pointer;
+  text-align:center;
+}
+
+.popup-card:hover{
+  background:#e2e6f3;
+}
+
+
+
+/* POPUP GRID LAYOUT */
+.inventory-popup-box {
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+/* Container for cards */
+.popup-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* ✅ 2 cards per row */
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* Individual card */
+.popup-card {
+  padding: 12px;
+  background: #f4f6fb;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: center;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.popup-card:hover {
+  background: #e2e6f3;
+}
