@@ -234,6 +234,24 @@
 
   <script>
 
+ /* ============================= */
+/* PREVENT BACK WITHOUT CONFIRM */
+/* ============================= */
+
+// Push fake history
+history.pushState(null, null, location.href);
+
+// Listen for back button
+window.onpopstate = function () {
+
+  // Show logout popup instead of going back
+  openLogoutPopup();
+
+  // Push state again to stay on same page
+  history.pushState(null, null, location.href);
+};   
+
+    
 /* ============================= */
 /* ELEMENTS */
 /* ============================= */
@@ -314,8 +332,8 @@ function encode(str){
 /* HIDDEN CREDENTIALS */
 /* ============================= */
 
-const USER_ENCODED = "QWRtaW4=";        // Admin
-const PASS_ENCODED = "QWRtaW5AMTIz";   // Admin@123
+const USER_ENCODED = "QWRtaW4=";        // 
+const PASS_ENCODED = "QWRtaW5AMTIz";   // 
 
 /* ============================= */
 /* LOGIN BUTTON */
