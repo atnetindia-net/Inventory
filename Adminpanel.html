@@ -169,12 +169,19 @@ href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wgh
 
 <script>
 
- /* ============================= */
+
+// BLOCK DIRECT ACCESS
+if (sessionStorage.getItem("isAdmin") !== "true") {
+  window.location.replace("Form.html");
+}
+
+
+/* ============================= */
 /* ADMIN SECURITY CHECK */
 /* ============================= */
 
-// ✅ Use localStorage (same as login page)
-if (localStorage.getItem("isAdmin") !== "true") {
+// Allow refresh, only block if NOT logged in
+if (sessionStorage.getItem("isAdmin") !== "true") {
   window.location.href = "Form.html";
 }
 
@@ -183,17 +190,11 @@ if (localStorage.getItem("isAdmin") !== "true") {
 /* ============================= */
 
 function openLogoutPopup(){
-  const popup = document.getElementById("logoutPopup");
-  if(popup){
-    popup.style.display = "flex";
-  }
+  document.getElementById("logoutPopup").style.display = "flex";
 }
 
 function closeLogoutPopup(){
-  const popup = document.getElementById("logoutPopup");
-  if(popup){
-    popup.style.display = "none";
-  }
+  document.getElementById("logoutPopup").style.display = "none";
 }
 
 /* ============================= */
@@ -202,10 +203,10 @@ function closeLogoutPopup(){
 
 function confirmLogout(){
 
-  // ✅ Clear login
-  localStorage.removeItem("isAdmin");
+  // Clear session
+  sessionStorage.removeItem("isAdmin");
 
-  // ✅ Redirect
+  // Redirect
   window.location.href = "Form.html";
 }
 
@@ -219,7 +220,7 @@ window.addEventListener("click", function(e){
     closeLogoutPopup();
   }
 });
-  
+
 </script>
 
 </body>
