@@ -234,24 +234,6 @@
 
   <script>
 
- /* ============================= */
-/* PREVENT BACK WITHOUT CONFIRM */
-/* ============================= */
-
-// Push fake history
-history.pushState(null, null, location.href);
-
-// Listen for back button
-window.onpopstate = function () {
-
-  // Show logout popup instead of going back
-  openLogoutPopup();
-
-  // Push state again to stay on same page
-  history.pushState(null, null, location.href);
-};   
-
-    
 /* ============================= */
 /* ELEMENTS */
 /* ============================= */
@@ -272,6 +254,7 @@ let mode = "user";
 /* ============================= */
 
 function setUserMode() {
+
   mode = "user";
 
   userBtn.classList.add("active");
@@ -290,6 +273,7 @@ function setUserMode() {
 }
 
 function setAdminMode() {
+
   mode = "admin";
 
   adminBtn.classList.add("active");
@@ -310,30 +294,33 @@ function setAdminMode() {
 /* BUTTON EVENTS */
 /* ============================= */
 
-userBtn.addEventListener("click", e => {
+userBtn.addEventListener("click", function(e){
   e.preventDefault();
   setUserMode();
 });
 
-adminBtn.addEventListener("click", e => {
+adminBtn.addEventListener("click", function(e){
   e.preventDefault();
   setAdminMode();
 });
 
 /* ============================= */
-/* ENCODE FUNCTION */
+/* SIMPLE ENCODE FUNCTION */
 /* ============================= */
 
 function encode(str){
-  return btoa(str);
+  return btoa(str); // base64 encode
 }
 
 /* ============================= */
 /* HIDDEN CREDENTIALS */
 /* ============================= */
 
-const USER_ENCODED = "QWRtaW4=";        // 
-const PASS_ENCODED = "QWRtaW5AMTIz";   // 
+// ""
+const USER_ENCODED = "QWRtaW4=";
+
+// ""
+const PASS_ENCODED = "QWRtaW5AMTIz";
 
 /* ============================= */
 /* LOGIN BUTTON */
@@ -365,13 +352,15 @@ submitBtn.addEventListener("click", function(e){
       encode(password) === PASS_ENCODED
     ){
 
-      // ✅ FIXED HERE
-      localStorage.setItem("isAdmin","true");
+      // Store session
+      sessionStorage.setItem("isAdmin","true");
 
       window.location.href = "Adminpanel.html";
 
     }else{
+
       alert("Invalid Admin Credentials");
+
     }
 
   }
