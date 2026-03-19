@@ -763,7 +763,6 @@ document.body.appendChild(overlay);
 
 }
 
-
 /* ============================= */
 /* MENU HANDLER */
 /* ============================= */
@@ -878,9 +877,8 @@ CHN:Number(d["CHN"]||0),
 PUN:Number(d["PUN"]||0),
 MUM:Number(d["MUM"]||0),
 DEL:Number(d["DEL"]||0),
-"STAND BY":Number(d["STAND BY"]||0),
-PARTNER:Number(d["PARTNER"]||0),
-"END CUSTOMER":Number(d["END CUSTOMER"]||0),
+"HYD":Number(d["HYD"]||0),
+"PARTNER / END CUSTOMER":Number(d["PARTNER / END CUSTOMER"]||0),
 
 TOTAL:Number(d["TOTAL"]||0) // ✅ moved to last
 
@@ -907,7 +905,6 @@ const cards=document.createElement("div");
 cards.className="summary-cards";
 
 [
-{title:"Total Categories",value:totalCategories},
 {title:"Total Products",value:totalProducts},
 {title:"Total Stock",value:totalStock}
 ].forEach(c=>{
@@ -929,22 +926,20 @@ mainContent.appendChild(cards);
 
 /* DASHBOARD TABLE */
 
-const tableColumns=["CATEGORY","PRODUCT MODEL","DEMO","SUPPORT","TOTAL"];
+const tableColumns = ["PRODUCT MODEL","DEMO","SUPPORT","TOTAL"];
 
-const tableRows=tableData.map(p=>{
+const tableRows = tableData.map(p => {
 
-const demo=p.TYPES["Demo"]?p.TYPES["Demo"].TOTAL:0;
-const support=p.TYPES["Support"]?p.TYPES["Support"].TOTAL:0;
+  const demo = p.TYPES["Demo"] ? p.TYPES["Demo"].TOTAL : 0;
+  const support = p.TYPES["Support"] ? p.TYPES["Support"].TOTAL : 0;
+  const total = demo + support;
 
-const total=demo+support;
-
-return[
-p.CATEGORY,
-p.MODEL,
-demo===0?"-":demo,
-support===0?"-":support,
-total
-];
+  return [
+    p.MODEL,
+    demo === 0 ? "-" : demo,
+    support === 0 ? "-" : support,
+    total
+  ];
 
 });
 
@@ -983,8 +978,8 @@ else columns=["DEMO"];
 
 const headings=[
 "HO","AHD","BLR","CHN",
-"PUN","MUM","DEL","STAND BY",
-"PARTNER","END CUSTOMER","TOTAL"
+"PUN","MUM","DEL","HYD",
+"PARTNER / END CUSTOMER","TOTAL"
 ];
 
 const tableEl=document.createElement("table");
@@ -994,15 +989,7 @@ tableEl.className="popup-table";
 
 let thead="<thead>";
 
-/* CATEGORY */
 
-thead+=`
-<tr>
-<th colspan="${columns.length+1}" class="category-row">
-${product.CATEGORY}
-</th>
-</tr>
-`;
 
 /* MODEL */
 
